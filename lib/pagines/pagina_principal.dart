@@ -11,9 +11,22 @@ class PaginaPrincipal extends StatefulWidget {
 class _PaginaPrincipalState extends State<PaginaPrincipal> {
   List tasquesLlista = [
     {"titol": "Tasca 1", "valor": false},
-    {"titol": "Tasca 2", "valor": true},
+    {"titol": "Tasca 2", "valor": false},
+    {"titol": "Tasca 3", "valor": true},
   ];
 
+  void canviaCheckbox(bool valorCheckBox, int posLlista) {
+    setState(() {
+      tasquesLlista[posLlista]["valor"] = !tasquesLlista[posLlista]["valor"];
+    });
+  }
+
+  void accioEsborrarTasca(int posLlista) {
+    setState(() {
+      tasquesLlista.removeAt(posLlista);
+    });
+  }
+    
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,17 +45,23 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
         shape: const CircleBorder(),
         onPressed: () {},
         child: Icon(Icons.add, color: Colors.white),
-
       ),
 
       //Body
       body: ListView.builder(
         itemCount: tasquesLlista.length,
         itemBuilder: (context, index) {
-          return ItemTasca(textTasca: tasquesLlista[index]["titol"], valorCheckBox: tasquesLlista[index]["valor"]);
+          return ItemTasca(
+            textTasca: tasquesLlista[index]["titol"],
+            valorCheckBox: tasquesLlista[index]["valor"],
+            canviarValocrCheckBox: (valor) => canviaCheckbox(
+              tasquesLlista[index]["valor"],
+              index,
+            ),
+            esborrarTasca: (valor) => accioEsborrarTasca(index),
+          );
         },
       ),
-
     );
   }
 }
