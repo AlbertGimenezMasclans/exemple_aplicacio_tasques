@@ -1,3 +1,4 @@
+import 'package:exemple_aplicacio_tasques/components/dialog_nova_tasca.dart';
 import 'package:exemple_aplicacio_tasques/components/item_tasca.dart';
 import 'package:flutter/material.dart';
 
@@ -15,6 +16,23 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
     {"titol": "Tasca 3", "valor": true},
   ];
 
+  TextEditingController tecTextTasca = TextEditingController();
+  
+  void accioGuardar() {
+    setState(() {
+      tasquesLlista.add({
+      "titol": tecTextTasca.text, 
+      "valor": false,
+      });
+    });
+    accioCancelar();
+  }
+
+  void accioCancelar() {
+    Navigator.of(context).pop();
+    tecTextTasca.clear();
+  }
+
   void canviaCheckbox(bool valorCheckBox, int posLlista) {
     setState(() {
       tasquesLlista[posLlista]["valor"] = !tasquesLlista[posLlista]["valor"];
@@ -25,6 +43,19 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
     setState(() {
       tasquesLlista.removeAt(posLlista);
     });
+  }
+
+  void crearNovaTasca() {
+    showDialog(
+      context: context, 
+      builder: (context) {
+        return DialogNovaTasca(
+          tecTextTasca: tecTextTasca, 
+          accioGuardar: accioGuardar, 
+          accioCancelar: accioCancelar,
+        );
+      }
+    );
   }
     
   @override
@@ -43,7 +74,7 @@ class _PaginaPrincipalState extends State<PaginaPrincipal> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.teal[300],
         shape: const CircleBorder(),
-        onPressed: () {},
+        onPressed: crearNovaTasca,
         child: Icon(Icons.add, color: Colors.white),
       ),
 
